@@ -16,3 +16,9 @@
 *.exe
 *.out
 *.app
+
+# Project files
+jscompiler
+lex.yy.c
+y.tab.c
+y.tab.h
