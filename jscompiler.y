@@ -29,13 +29,15 @@ void updateSymbolVal(char symbol, int val);
 // Expect a token called print, exit_command, etc.
 // It tells yacc to generate a header file with these values that the lex can use
 %token print
+%token console_log
 %token exit_command
+
 // token number gets stored in 'num' in the union type
 %token <num> number
 %token <id> identifier
 
 // Assign types to non terminals on left side of grammar
-%type <num> line exp term 
+%type <num> line exp term
 %type <id> assignment
 
 %%
@@ -44,18 +46,22 @@ void updateSymbolVal(char symbol, int val);
 
 line    : assignment ';'		{;}
 		| exit_command ';'		{exit(EXIT_SUCCESS);}
-		| print exp ';'			{printf("> Printing %d\n", $2);}
+		| print exp ';'			{printf("> %d\n", $2);}
+		| console_log exp ';'	{printf("> %d\n", $2);}
 		| line assignment ';'	{;}
-		| line print exp ';'	{printf("> Printing %d\n", $3);}
+		| line print exp ';'	{printf("> %d\n", $3);}
+		| line console_log exp ';'	{printf("> %d\n", $3);}
 		| line exit_command ';'	{exit(EXIT_SUCCESS);}
         ;
 
 assignment : identifier '=' exp  { updateSymbolVal($1,$3); }
 			;
+
 exp    	: term                  {$$ = $1;}
        	| exp '+' term          {$$ = $1 + $3;}
        	| exp '-' term          {$$ = $1 - $3;}
        	;
+
 term   	: number                {$$ = $1;}
 		| identifier			{$$ = symbolVal($1);} 
         ;

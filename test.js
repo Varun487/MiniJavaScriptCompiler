@@ -6,3 +6,5 @@ C = a + b;
 print C;
 D = a - b;
 print D;
+console.log 1;
+console.log 2;

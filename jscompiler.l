@@ -3,7 +3,10 @@
 void yyerror (char *s);
 int yylex();
 %}
+
 %%
+
+"console.log"		   {return console_log;}
 "print"				   {return print;}
 "exit"				   {return exit_command;}
 [a-zA-Z]			   {yylval.id = yytext[0]; return identifier;}
@@ -13,4 +16,5 @@ int yylex();
 .                      {ECHO; yyerror ("unexpected character");}
 
 %%
+
 int yywrap (void) {return 1;}

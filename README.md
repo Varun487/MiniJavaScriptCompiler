@@ -28,9 +28,17 @@ make
 ###### All members are from Semester 6 Section E Pes University EC Campus
 
 1. Varun Seshu - PES2201800074
-2. Sneha - SRN
+2. Sneha Jain A - PES2201800030
 3. Bhavan Naik - PES2201800047
 
 # TODO
 - PHASE 1 in CD Project Guidelines
+	- Logging
+		- Manage Brackets
+		- Print everything in those brackets
+	- Comments
+	- Assignments
+	- Conversions
+	- Operations
+	- Syntax analysis
 - PHASE 2 in CD Project Guidelines
