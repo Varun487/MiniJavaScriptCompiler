@@ -32,7 +32,5 @@ make
 3. Bhavan Naik - PES2201800047
 
 # TODO
-- Make a better README
-- Add members to repo
 - PHASE 1 in CD Project Guidelines
 - PHASE 2 in CD Project Guidelines
