@@ -7,18 +7,28 @@ int yylex();
 #include <ctype.h>
 #include <string.h>
 
+struct identifier{
+    char var_name[31];
+	union data {
+		char str[100]; 
+		double num;
+	} data;
+} identifier;
+
 // prints a number to stdout
 void print_number(double number);
+
+// converts string given in yytext into desired output string
+char *convert_string(char *string);
 
 // prints a string to stdout
 void print_string(char *string);
 
-// Primitive symbol table implementation - max of 52 vars
-// Each var can be a single upper case / lower case letter
+// Primitive symbol table implementation
 int symbols[52];
 
 // Given symbol character, will look up value int of that in symbol table
-int   getSymbolVal(char symbol);
+int getSymbolVal(char symbol);
 
 // Given symbol and value, will make sure that the respective symbol gets that value
 void updateSymbolVal(char symbol, int val);
@@ -103,22 +113,28 @@ void updateSymbolVal(char symbol, int val);
 
 %%
 
-/* descriptions of expected inputs     corresponding actions (in C) */
+/* descriptions of expected inputs corresponding actions (in C) */
 
-line    : T_SINGLE_COMMENT end				{;}
-		| line T_SINGLE_COMMENT end 		{;}
-		| T_PRINT print_exp 				{;}
-		| line T_PRINT print_exp 			{;}
+line    : T_SINGLE_COMMENT end						{;}
+		| line T_SINGLE_COMMENT end 				{;}
+		| T_PRINT print_exp 						{;}
+		| line T_PRINT print_exp 					{;}
+		| T_VAR T_IDENTIFIER T_ASSIGN val 			{;}
+		| line T_VAR T_IDENTIFIER T_ASSIGN val 		{;}
 		;
 
 print_exp 	: T_OPEN_BRACKET T_NUMBER T_CLOSE_BRACKET end {print_number($2);}
 			| T_OPEN_BRACKET T_STRING T_CLOSE_BRACKET end {print_string($2);}
 			;
 
-end 	: T_NEXT_LINE									{;}
-		| T_NEXT_LINE end								{;}
-		| T_SEMICOLON 									{;}
-		| T_SEMICOLON end 								{;}
+val 	: T_NUMBER end								{printf("\nAssigned %lf\n", $1);}
+		| T_STRING end 								{printf("\nAssigned ");print_string($1);}
+		;
+
+end 	: T_NEXT_LINE								{;}
+		| T_NEXT_LINE end							{;}
+		| T_SEMICOLON 								{;}
+		| T_SEMICOLON end 							{;}
 		;
 
 %%                     /* C code */
@@ -127,9 +143,36 @@ void print_number(double number) {
 	printf("\n\noutput> %0.9lf\n\n", number);
 }
 
-void print_string(char *string) {
+char *convert_string(char *string) {
+		
+	char terminator;
 
-	// printf("\n\noutput> %s\n\n", string);
+	if (string[0] == '\"') {
+		terminator = '\"';
+	}
+	
+	else {
+		terminator = '\'';
+	}
+
+	int i = 1;
+	
+	int len = 0;
+
+	while (string[i] != terminator) {
+	 	len++;
+	 	i++;
+	}
+
+	printf("\n");
+
+	char *new_string = malloc(strlen(string)*sizeof(char));
+	
+	return "\n";
+
+}
+
+void print_string(char *string) {
 
 	printf("\n\noutput> ");
 

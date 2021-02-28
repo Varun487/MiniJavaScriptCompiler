@@ -18,7 +18,7 @@ int yylex();
 ";"					   {printf("T_SEMICOLON "); return T_SEMICOLON;}
 "\n"				   {printf("T_NEXT_LINE\n"); return T_NEXT_LINE;}
 \/\/.*				   {printf("T_SINGLE_COMMENT "); return T_SINGLE_COMMENT;}
-\/*.\*\/		   	   {printf("T_MULTI_COMMENT "); return T_MULTI_COMMENT;}
+\/*.*\*\/		   	   {printf("T_MULTI_COMMENT "); return T_MULTI_COMMENT;}
 ","					   {printf("T_SEPARATOR "); return T_SEPARATOR;}
 
 "true"		   		   {printf("T_TRUE "); return T_TRUE;}
@@ -33,8 +33,8 @@ int yylex();
 "continue"			   {printf("T_CONTINUE "); return T_CONTINUE;}
 
 -?[0-9]+(\.[0-9]+)?		    {printf("T_NUMBER "); char *ptr; yylval.num = strtod(yytext, &ptr); return T_NUMBER;}
-\".*\"		   	   		{printf("T_STRING "); yylval.str = yytext; return T_STRING;}
-\'.*\'		   	   		{printf("T_STRING "); yylval.str = yytext; return T_STRING;}
+\".*\"		   	   			{printf("T_STRING "); yylval.str = yytext; return T_STRING;}
+\'.*\'		   	   			{printf("T_STRING ");  yylval.str = yytext; return T_STRING;}
 [a-zA-z_$][a-zA-z0-9_$]*	{printf("T_IDENTIFIER "); return T_IDENTIFIER;}
 
 "+"						{printf("T_ADD "); return T_ADD;}
