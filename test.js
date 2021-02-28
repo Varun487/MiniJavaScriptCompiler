@@ -22,7 +22,12 @@ console.log(null)
 console.log(undefined);
 true
 false;
+a
 abc
 var abc;
 console.log(abc)
 var a = 12 + (3 - 4);
+
+for (var i = 0; i < 10; i++) {
+	console.log("Hello " + i);
+}

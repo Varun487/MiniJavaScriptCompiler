@@ -31,8 +31,6 @@ int yylex();
 "var"				   {printf("T_VAR ");}
 "const"				   {printf("T_CONST ");}
 "continue"			   {printf("T_CONTINUE ");}
-"class"				   {printf("T_CLASS ");}
-"new"				   {printf("T_NEW ");}
 
 [0-9]+(\.[0-9]+)?		    {printf("T_NUMBER ");}
 \"(.*?)\"		   	   		{printf("T_STRING ");}
@@ -54,7 +52,10 @@ int yylex();
 "||"					{printf("T_OR ");}
 "!"						{printf("T_NOT ");}
 "."						{printf("T_DOT ");}
-
+"++"					{printf("T_INCREMENT ");}
+"--"					{printf("T_DECREMENT ");}
+"+="					{printf("T_INC_ASSIGN ");}
+"-="					{printf("T_DEC_ASSIGN ");}
 
 [ \t]                  ;
 .                      {ECHO; yyerror ("unexpected character");}
@@ -63,10 +64,10 @@ int yylex();
 
 int yywrap (void) {return 1;}
 
-// [a-zA-Z]			   {yylval.id = yytext[0]; return identifier;}
-// [0-9]+                 {yylval.num = atoi(yytext); return number;}
+// [a-zA-Z]			   	   {yylval.id = yytext[0]; return identifier;}
+// [0-9]+                  {yylval.num = atoi(yytext); return number;}
 // "print"				   {return print;}
 // "exit"				   {return exit_command;}
 // [0-9]+				   {printf("T_NUMBER\n");}
-// [ \t\n]                ;
+// [ \t\n]                 ;
 // [-+=;]           	   {return yytext[0];}

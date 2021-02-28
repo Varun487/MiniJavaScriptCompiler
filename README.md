@@ -34,16 +34,16 @@ make
 # TODO
 - Lexical Analysis and Token Generation
 	- Conversion of strings to numbers
-	- Multiline comments - if a file ends with comments, return error
-	- Evaluate complex math expressions
-	- Objects?
-	- Dot notation?
+	- Multiline comments
+		- if a file ends with unterminated comments, return error
 	- Update yylval, yylloc, other global variables (line and col nums) and return token code for each action
 	- Record the line number and first and last column in yylloc for all tokens
+	- Recording the position of each lexeme requires you to track the current line and column numbers (you will need global variables) and update them as the scanner reads the file, most likely incrementing the line count on each new line and the column on each token. A tab character accounts for 8 columns.
 	- Report lexical errors for improper strings, lengthy identifiers, and invalid characters
 	- For each character that cannot be matched to any token pattern, report it and continue parsing with the next character.
 	- If a string erroneously contains a newline, report an error and continue at the beginning of the next line.
 	- If an identifier is longer than the maximum (31 characters), report the error, truncate the identifier to the first 31 characters (discarding the rest), and continue.
 - Symbol Table generation
 - CFG
+	- Evaluate complex math expressions?
 - Parsing: syntax validation 
