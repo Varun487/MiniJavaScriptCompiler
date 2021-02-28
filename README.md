@@ -33,9 +33,10 @@ make
 
 # TODO
 - Lexical Analysis and Token Generation
-	- Conversion of strings to numbers
+	- Conversion of strings to numbers ```DONE```
 	- Multiline comments
 		- if a file ends with unterminated comments, return error
+	- Fix Inline comment after a statement
 	- Update yylval, yylloc, other global variables (line and col nums) and return token code for each action
 	- Record the line number and first and last column in yylloc for all tokens
 	- Recording the position of each lexeme requires you to track the current line and column numbers (you will need global variables) and update them as the scanner reads the file, most likely incrementing the line count on each new line and the column on each token. A tab character accounts for 8 columns.
@@ -44,6 +45,27 @@ make
 	- If a string erroneously contains a newline, report an error and continue at the beginning of the next line.
 	- If an identifier is longer than the maximum (31 characters), report the error, truncate the identifier to the first 31 characters (discarding the rest), and continue.
 - Symbol Table generation
-- CFG
+- CFG and Parsing (Syntax validation)
+	- Print number ```DONE```
+	- Print string
+	- Assign Variable
+		- number
+		- string
+	- Print Varible
+		- number
+		- string
+	- Simple math expressions
+		- Assign variable after computing numeric expression
+		- Assign variable after computing string expression
+		- Assign variable after computing string and numeric combination expression
+		- Print variable after computing numeric expression
+		- Print variable after computing string expression
+		- Print variable after computing string and numeric combination expression		
+	- Boolean operations on variables
+	- Increment and decrement variables
+	- For loop computation
+	- Recognising errors and suggesting fix
 	- Evaluate complex math expressions?
-- Parsing: syntax validation 
+	- Objects?
+	- Dot notation?
+	- Functions?

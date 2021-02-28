@@ -1,33 +1,17 @@
-// Testing the lexical analyzer
-// number datatype must include . and are analogous to double in c
-// convert string to numbers and return in case of number token
-// Consume comments, if a file ends with comments, return error
-// Evaluate complex math expressions
-// Objects?
-// Dot notation?
-// Fix multiline comments
-// Update yylval, yylloc and return token code for each token
-// The yylval global variable is used to record the value for each lexeme scanned and
-// the yylloc global records the lexeme position (line number and column). 
-// The action for each pattern will update the global variables and return the appropriate token code.
+// /*
+// 	Multiline comments -> BUG
+// */
 
-// comment test
-1
-12341.2312343
-"hello"
-console.log(1);
-console.log(100)
-console.log("hello world");
-console.log(null)
-console.log(undefined);
-true
-false;
-a
-abc
-var abc;
-console.log(abc)
-var a = 12 + (3 - 4);
+// test comment;
+// 1 // syntax error
+// console.log(0) // testing in line comment after a statement -> BUG
 
-for (var i = 0; i < 10; i++) {
-	console.log("Hello " + i);
-}
+// testing logging numbers
+console.log(0);
+console.log(12)
+console.log(132415.123456789);
+
+// testing 2 inline statements
+console.log(1); console.log(2);
+console.log(3); console.log(4)
+// console.log(0) console.log(12); // syntax error

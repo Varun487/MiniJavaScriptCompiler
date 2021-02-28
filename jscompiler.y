@@ -6,67 +6,121 @@ int yylex();
 #include <stdlib.h>
 #include <ctype.h>
 
+// prints a number to stdout
+void print_number(double number);
+
 // Primitive symbol table implementation - max of 52 vars
 // Each var can be a single upper case / lower case letter
 int symbols[52];
 
 // Given symbol character, will look up value int of that in symbol table
-int symbolVal(char symbol);
+int   getSymbolVal(char symbol);
 
 // Given symbol and value, will make sure that the respective symbol gets that value
 void updateSymbolVal(char symbol, int val);
+
 %}
 
 /* Yacc definitions */
 
 // Specify the different types that the lexical analyser can return
 // Similar to union in c
-%union {int num; char id;}
+%union 
+{
+	double num;
+	char *id;
+	char *str;
+}
 
 // Which of the productions are going to be the starting rule or production
 %start line
 
 // Expect a token called print, exit_command, etc.
 // It tells yacc to generate a header file with these values that the lex can use
-%token print
-%token console_log
-%token exit_command
+%token T_PRINT
+
+%token T_OPEN_BRACKET
+%token T_CLOSE_BRACKET
+%token T_OPEN_CURLY
+%token T_CLOSE_CURLY
+%token T_OPEN_SQUARE
+%token T_CLOSE_SQUARE
+
+%token T_SEMICOLON
+%token T_NEXT_LINE
+%token T_SINGLE_COMMENT
+%token T_MULTI_COMMENT
+%token T_SEPARATOR 
+
+%token T_TRUE 
+%token T_FALSE 
+%token T_UNDEFINED 
+%token T_NULL 
+%token T_BREAK 
+%token T_FOR 
+%token T_LET 
+%token T_VAR 
+%token T_CONST 
+%token T_CONTINUE 
+
+// %token T_NUMBER 
+// %token T_STRING 
+// %token T_IDENTIFIER 
+
+%token T_ADD 
+%token T_SUB 
+%token T_MUL 
+%token T_DIV 
+%token T_REM 
+%token T_ASSIGN 
+%token T_EQ 
+%token T_NEQ 
+%token T_LT 
+%token T_LTE 
+%token T_GT 
+%token T_GTE 
+%token T_AND 
+%token T_OR 
+%token T_NOT 
+%token T_DOT 
+%token T_INCREMENT 
+%token T_DECREMENT 
+%token T_INC_ASSIGN 
+%token T_DEC_ASSIGN 
 
 // token number gets stored in 'num' in the union type
-%token <num> number
-%token <id> identifier
+%token <num> T_NUMBER
+%token <str> T_STRING
+%token <id> T_IDENTIFIER
 
 // Assign types to non terminals on left side of grammar
-%type <num> line exp term
-%type <id> assignment
+// %type <num> line exp term
+// %type <id> assignment
 
 %%
 
 /* descriptions of expected inputs     corresponding actions (in C) */
 
-line    : assignment ';'		{;}
-		| exit_command ';'		{exit(EXIT_SUCCESS);}
-		| print exp ';'			{printf("> %d\n", $2);}
-		| console_log exp ';'	{printf("> %d\n", $2);}
-		| line assignment ';'	{;}
-		| line print exp ';'	{printf("> %d\n", $3);}
-		| line console_log exp ';'	{printf("> %d\n", $3);}
-		| line exit_command ';'	{exit(EXIT_SUCCESS);}
-        ;
+line    : T_SINGLE_COMMENT end				{;}
+		| line T_SINGLE_COMMENT end 		{;}
+		| T_PRINT print_exp 				{;}
+		| line T_PRINT print_exp 			{;}
+		;
 
-assignment : identifier '=' exp  { updateSymbolVal($1,$3); }
+print_exp 	:  T_OPEN_BRACKET T_NUMBER T_CLOSE_BRACKET end {print_number($2);}
 			;
 
-exp    	: term                  {$$ = $1;}
-       	| exp '+' term          {$$ = $1 + $3;}
-       	| exp '-' term          {$$ = $1 - $3;}
-       	;
-
-term   	: number                {$$ = $1;}
-		| identifier			{$$ = symbolVal($1);} 
-        ;
+end 	: T_NEXT_LINE									{;}
+		| T_NEXT_LINE end								{;}
+		| T_SEMICOLON 									{;}
+		| T_SEMICOLON end 								{;}
+		;
 
 %%                     /* C code */
+
+void print_number(double number) {
+	printf("\n\noutput> %0.9lf\n\n", number);
+}
 
 int computeSymbolIndex(char token)
 {
@@ -80,7 +134,7 @@ int computeSymbolIndex(char token)
 } 
 
 /* returns the value of a given symbol */
-int symbolVal(char symbol)
+int   getSymbolVal(char symbol)
 {
 	int bucket = computeSymbolIndex(symbol);
 	return symbols[bucket];
@@ -102,5 +156,28 @@ int main (void) {
 
 	return yyparse ( );
 }
+
+
+// line : assignment ';'		{;}
+// 		| exit_command ';'		{exit(EXIT_SUCCESS);}
+// 		| print exp ';'			{printf("> %d\n", $2);}
+// 		| console_log exp ';'	{printf("> %d\n", $2);}
+// 		| line assignment ';'	{;}
+// 		| line print exp ';'	{printf("> %d\n", $3);}
+// 		| line console_log exp ';'	{printf("> %d\n", $3);}
+// 		| line exit_command ';'	{exit(EXIT_SUCCESS);}
+//         ;
+
+// assignment : identifier '=' exp  { updateSymbolVal($1,$3); }
+// 			;
+
+// exp    	: term                  {$$ = $1;}
+//        	| exp '+' term          {$$ = $1 + $3;}
+//        	| exp '-' term          {$$ = $1 - $3;}
+//        	;
+
+// term   	: number                {$$ = $1;}
+// 		| identifier			{$$ =   getSymbolVal($1);} 
+//         ;
 
 void yyerror (char *s) {fprintf (stderr, "%s\n", s);}
