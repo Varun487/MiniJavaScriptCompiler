@@ -32,8 +32,9 @@ int yylex();
 "const"				   {printf("T_CONST "); return T_CONST;}
 "continue"			   {printf("T_CONTINUE "); return T_CONTINUE;}
 
-[0-9]+(\.[0-9]+)?		    {printf("T_NUMBER "); char *ptr; yylval.num = strtod(yytext, &ptr); return T_NUMBER;}
-\"(.*?)\"		   	   		{printf("T_STRING "); return T_STRING;}
+-?[0-9]+(\.[0-9]+)?		    {printf("T_NUMBER "); char *ptr; yylval.num = strtod(yytext, &ptr); return T_NUMBER;}
+\".*\"		   	   		{printf("T_STRING "); yylval.str = yytext; return T_STRING;}
+\'.*\'		   	   		{printf("T_STRING "); yylval.str = yytext; return T_STRING;}
 [a-zA-z_$][a-zA-z0-9_$]*	{printf("T_IDENTIFIER "); return T_IDENTIFIER;}
 
 "+"						{printf("T_ADD "); return T_ADD;}

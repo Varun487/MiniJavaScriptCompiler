@@ -5,9 +5,13 @@ int yylex();
 #include <stdio.h>     /* C declarations used in actions */
 #include <stdlib.h>
 #include <ctype.h>
+#include <string.h>
 
 // prints a number to stdout
 void print_number(double number);
+
+// prints a string to stdout
+void print_string(char *string);
 
 // Primitive symbol table implementation - max of 52 vars
 // Each var can be a single upper case / lower case letter
@@ -107,7 +111,8 @@ line    : T_SINGLE_COMMENT end				{;}
 		| line T_PRINT print_exp 			{;}
 		;
 
-print_exp 	:  T_OPEN_BRACKET T_NUMBER T_CLOSE_BRACKET end {print_number($2);}
+print_exp 	: T_OPEN_BRACKET T_NUMBER T_CLOSE_BRACKET end {print_number($2);}
+			| T_OPEN_BRACKET T_STRING T_CLOSE_BRACKET end {print_string($2);}
 			;
 
 end 	: T_NEXT_LINE									{;}
@@ -120,6 +125,32 @@ end 	: T_NEXT_LINE									{;}
 
 void print_number(double number) {
 	printf("\n\noutput> %0.9lf\n\n", number);
+}
+
+void print_string(char *string) {
+
+	// printf("\n\noutput> %s\n\n", string);
+
+	printf("\n\noutput> ");
+
+	int i = 1;
+
+	char terminator;
+
+	if (string[0] == '\"') {
+		terminator = '\"';
+	}
+	else {
+		terminator = '\'';
+	}
+
+	while (string[i] != terminator) {
+	 	printf("%c", string[i]);
+	 	i++;
+	}
+
+	printf("\n\n");
+
 }
 
 int computeSymbolIndex(char token)
