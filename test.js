@@ -77,6 +77,35 @@ console.log(2 * 2 - 1);
 
 var test = 1;
 console.log(test);
+test++
+console.log(test);
+test--
+console.log(test);
+test += 3;
+console.log(test);
+test -= 3;
+console.log(test);
+test *= 3;
+console.log(test)
+test /= 3;
+console.log(test)
+test %= 3;
+console.log(test)
+test = 4
+
+// boolean expressions
+1 == 3
+1 < 3
+1 <= 3
+1 > 3
+1 >= 3
+
+test == 3
+3 == test;
+test == abc
+test < 3
+test <= 3
+test > 3
 
 // for loop test
 // for (var i = 0; i < 3; i++) {

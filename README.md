@@ -58,8 +58,8 @@ make
 		- Boolean
 		- null, undefined
 	- Simple math expressions ```DONE``` ```BUGS```
-	- Boolean operations on variables
-	- Increment and decrement variables
+	- Increment and decrement variables ```DONE```
+	- Boolean operations on variables ```DONE```
 	- For loop computation
 	- While loop computation
 	- Print combination of types

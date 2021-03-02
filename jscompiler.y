@@ -75,6 +75,42 @@ double rem(double a, double b);
 // Gets the double value of an identifier
 double get_id_num(char *symbol);
 
+// Increment the value of a number identifier by 1
+void increment(char *symbol);
+
+// Decrement the value of a number identifier by 1
+void decrement(char *symbol);
+
+// Increment the value of a number identifier by val
+void inc_assign(char *symbol, double val);
+
+// Decrement the value of a number identifier by val
+void dec_assign(char *symbol, double val);
+
+// Multiply the value of a number identifier by val
+void mul_assign(char *symbol, double val);
+
+// Divide the value of a number identifier by val
+void div_assign(char *symbol, double val);
+
+// Remainder of the value of a number identifier by val
+void rem_assign(char *symbol, double val);
+
+// returns whether the 2 numbers are equal
+double eq(double val1, double val2);
+
+// returns whether the 2 numbers are not equal
+double neq(double val1, double val2);
+
+// returns whether one number is lesser than the other
+double lt(double val1, double val2);
+
+double lte(double val1, double val2);
+
+double gt(double val1, double val2);
+
+double gte(double val1, double val2);
+
 %}
 
 /* Yacc definitions */
@@ -144,6 +180,9 @@ double get_id_num(char *symbol);
 %token T_DECREMENT 
 %token T_INC_ASSIGN 
 %token T_DEC_ASSIGN 
+%token T_MUL_ASSIGN 
+%token T_DIV_ASSIGN 
+%token T_REM_ASSIGN 
 
 // token number gets stored in 'num' in the union type
 %token <num> T_NUMBER
@@ -151,7 +190,7 @@ double get_id_num(char *symbol);
 %token <id> T_IDENTIFIER
 
 // Assign types to non terminals on left side of grammar
-%type <num> math_exp
+%type <num> math_exp boolean_exp
 // %type <id> assignment
 
 %%
@@ -168,10 +207,12 @@ line    : T_SINGLE_COMMENT end									{;}
 		| line identifier_exp 									{;}
 		| math_exp end											{;}
 		| line math_exp end										{;}
+		| boolean_exp end 										{;}
+		| line boolean_exp end 									{;}
 		/* | T_FOR for_exp 										{;} */
-		/* | line T_FOR for_exp 									{;} */
+		/* | line T_FOR for_exp 								{;} */
 		/* | T_WHILE while_exp 									{;} */
-		/* | line T_WHILE while_exp 								{;} */
+		/* | line T_WHILE while_exp 							{;} */
 		;
 
 print_exp 	: T_OPEN_BRACKET print_val T_CLOSE_BRACKET end 		{;}
@@ -187,13 +228,48 @@ print_val 	: T_NUMBER 								{print_number($1);}
 			| math_exp 								{print_number($1);}
 			;
 
+boolean_exp 	: T_NUMBER T_EQ T_NUMBER 			{$$ = eq($1, $3);}
+				| T_IDENTIFIER T_EQ T_NUMBER 		{$$ = eq(get_id_num($1), $3);}
+				| T_NUMBER T_EQ T_IDENTIFIER 		{$$ = eq($1, get_id_num($3));}
+				| T_IDENTIFIER T_EQ T_IDENTIFIER 	{$$ = eq(get_id_num($1), get_id_num($3));}
+				| T_NUMBER T_NEQ T_NUMBER 			{$$ = neq($1, $3);}
+				| T_IDENTIFIER T_NEQ T_NUMBER 		{$$ = neq(get_id_num($1), $3);}
+				| T_NUMBER T_NEQ T_IDENTIFIER 		{$$ = neq($1, get_id_num($3));}
+				| T_IDENTIFIER T_NEQ T_IDENTIFIER 	{$$ = neq(get_id_num($1), get_id_num($3));}
+				| T_NUMBER T_LT T_NUMBER 			{$$ = lt($1, $3);}
+				| T_IDENTIFIER T_LT T_NUMBER 		{$$ = lt(get_id_num($1), $3);}
+				| T_NUMBER T_LT T_IDENTIFIER 		{$$ = lt($1, get_id_num($3));}
+				| T_IDENTIFIER T_LT T_IDENTIFIER 	{$$ = lt(get_id_num($1), get_id_num($3));}
+				| T_NUMBER T_LTE T_NUMBER 			{$$ = lte($1, $3);}
+				| T_IDENTIFIER T_LTE T_NUMBER 		{$$ = lte(get_id_num($1), $3);}
+				| T_NUMBER T_LTE T_IDENTIFIER 		{$$ = lte($1, get_id_num($3));}
+				| T_IDENTIFIER T_LTE T_IDENTIFIER 	{$$ = lte(get_id_num($1), get_id_num($3));}
+				| T_NUMBER T_GT T_NUMBER 			{$$ = gt($1, $3);}
+				| T_IDENTIFIER T_GT T_NUMBER 		{$$ = gt(get_id_num($1), $3);}
+				| T_NUMBER T_GT T_IDENTIFIER 		{$$ = gt($1, get_id_num($3));}
+				| T_IDENTIFIER T_GT T_IDENTIFIER 	{$$ = gt(get_id_num($1), get_id_num($3));}
+				| T_NUMBER T_GTE T_NUMBER 			{$$ = gte($1, $3);}
+				| T_IDENTIFIER T_GTE T_NUMBER 		{$$ = gte(get_id_num($1), $3);}
+				| T_NUMBER T_GTE T_IDENTIFIER 		{$$ = gte($1, get_id_num($3));}
+				| T_IDENTIFIER T_GTE T_IDENTIFIER 	{$$ = gte(get_id_num($1), get_id_num($3));}
+				;
+
 identifier_exp 	: T_IDENTIFIER T_ASSIGN T_NUMBER end 		{update_symbol_table_number($1, $3);}
 				| T_IDENTIFIER T_ASSIGN T_STRING end 		{update_symbol_table_string($1, $3);}
 				| T_IDENTIFIER T_ASSIGN T_TRUE end 			{update_symbol_table_bool($1, 2);}
 				| T_IDENTIFIER T_ASSIGN T_FALSE end 		{update_symbol_table_bool($1, 3);}
 				| T_IDENTIFIER T_ASSIGN T_NULL end 			{update_symbol_table_bool($1, 4);}
 				| T_IDENTIFIER T_ASSIGN T_UNDEFINED end 	{update_symbol_table_bool($1, 5);}
-				| T_IDENTIFIER T_ASSIGN math_exp 			{update_symbol_table_number($1, $3);}
+				| T_IDENTIFIER T_ASSIGN math_exp end 		{update_symbol_table_number($1, $3);}
+				| T_IDENTIFIER T_INCREMENT end				{increment($1);}
+				| T_IDENTIFIER T_DECREMENT end 				{decrement($1);}
+				| T_INCREMENT T_IDENTIFIER end  			{increment($2);}
+				| T_DECREMENT T_IDENTIFIER end				{decrement($2);}
+				| T_IDENTIFIER T_INC_ASSIGN T_NUMBER end 	{inc_assign($1, $3);}
+				| T_IDENTIFIER T_DEC_ASSIGN T_NUMBER end 	{dec_assign($1, $3);}
+				| T_IDENTIFIER T_MUL_ASSIGN T_NUMBER end 	{mul_assign($1, $3);}
+				| T_IDENTIFIER T_DIV_ASSIGN T_NUMBER end 	{div_assign($1, $3);}
+				| T_IDENTIFIER T_REM_ASSIGN T_NUMBER end 	{rem_assign($1, $3);}
 				;
 
 math_exp 	: T_NUMBER '+' T_NUMBER 				{$$ = $1 + $3;}
@@ -266,7 +342,7 @@ char *convert_identifer(char *identifer) {
 
 	int i;
 
-	for (i = 0; i < 31 && identifer[i] != ' '; i++) {
+	for (i = 0; i < 31 && identifer[i] != ' ' && identifer[i] != '+' && identifer[i] != '-'; i++) {
 		new_identifier[i] = identifer[i];
 	}
 	
@@ -423,8 +499,149 @@ double rem(double a, double b) {
 }
 
 double get_id_num(char *symbol) {
+	symbol = convert_identifer(symbol);
 	int type = 0;
-	return *(double *)get_symbol_value(symbol, &type);
+	void *void_val = get_symbol_value(symbol, &type);
+	double *val = (double *) void_val;
+	return *val;
+}
+
+// Increment the value of a number identifier by 1
+void increment(char *symbol) {
+	double val = get_id_num(symbol);
+	// printf("val: %lf\n", val);
+	val += 1;
+	update_symbol_table_number(symbol, val);
+}
+
+// Decrement the value of a number identifier by 1
+void decrement(char *symbol){
+	double val = get_id_num(symbol);
+	// printf("val: %lf\n", val);
+	val -= 1;
+	update_symbol_table_number(symbol, val);
+}
+
+// Increment the value of a number identifier by val
+void inc_assign(char *symbol, double val){
+	symbol = convert_identifer(symbol);
+	// printf("symbol: %s\n", symbol);
+	int type = 0;
+	void *void_val = get_symbol_value(symbol, &type);
+	double *prev_val = (double *) void_val;
+	// printf("before increment: %lf\n", *val);
+	*prev_val += val;
+	// printf("after increment: %lf\n", *val);
+	update_symbol_table_number(symbol, *prev_val);
+}
+
+// Decrement the value of a number identifier by val
+void dec_assign(char *symbol, double val){
+	symbol = convert_identifer(symbol);
+	// printf("symbol: %s\n", symbol);
+	int type = 0;
+	void *void_val = get_symbol_value(symbol, &type);
+	double *prev_val = (double *) void_val;
+	// printf("before increment: %lf\n", *val);
+	*prev_val -= val;
+	// printf("after increment: %lf\n", *val);
+	update_symbol_table_number(symbol, *prev_val);
+}
+
+// Multiply the value of a number identifier by val
+void mul_assign(char *symbol, double val) {
+	symbol = convert_identifer(symbol);
+	// printf("symbol: %s\n", symbol);
+	int type = 0;
+	void *void_val = get_symbol_value(symbol, &type);
+	double *prev_val = (double *) void_val;
+	// printf("before increment: %lf\n", *val);
+	*prev_val *= val;
+	// printf("after increment: %lf\n", *val);
+	update_symbol_table_number(symbol, *prev_val);
+}
+
+// Divide the value of a number identifier by val
+void div_assign(char *symbol, double val) {
+	symbol = convert_identifer(symbol);
+	// printf("symbol: %s\n", symbol);
+	int type = 0;
+	void *void_val = get_symbol_value(symbol, &type);
+	double *prev_val = (double *) void_val;
+	// printf("before increment: %lf\n", *val);
+	*prev_val /= val;
+	// printf("after increment: %lf\n", *val);
+	update_symbol_table_number(symbol, *prev_val);
+}
+
+// Remainder of the value of a number identifier by val
+void rem_assign(char *symbol, double val) {
+	symbol = convert_identifer(symbol);
+	// printf("symbol: %s\n", symbol);
+	int type = 0;
+	void *void_val = get_symbol_value(symbol, &type);
+	double *prev_val = (double *) void_val;
+	// printf("before increment: %lf\n", *val);
+	*prev_val = (int)*prev_val % (int)val;
+	// printf("after increment: %lf\n", *val);
+	update_symbol_table_number(symbol, *prev_val);
+}
+
+// returns whether the 2 numbers are equal
+double eq(double val1, double val2) {
+	if (val1 == val2) {
+		printf("booleanexp> %lf == %lf -> true\n", val1, val2);
+		return 1.0;
+	}
+	printf("booleanexp> %lf == %lf -> false\n", val1, val2);
+	return 0.0;
+}
+
+// returns whether the 2 numbers are not equal
+double neq(double val1, double val2){
+	if (val1 != val2) {
+		printf("booleanexp> %lf != %lf -> true\n", val1, val2);
+		return 1.0;
+	}
+	printf("booleanexp> %lf != %lf -> false\n", val1, val2);
+	return 0.0;
+}
+
+// returns whether one number is lesser than the other
+double lt(double val1, double val2){
+	if (val1 < val2) {
+		printf("booleanexp> %lf < %lf -> true\n", val1, val2);
+		return 1.0;
+	}
+	printf("booleanexp> %lf < %lf -> false\n", val1, val2);
+	return 0.0;
+}
+
+double lte(double val1, double val2){
+	if (val1 <= val2) {
+		printf("booleanexp> %lf <= %lf -> true\n", val1, val2);
+		return 1.0;
+	}
+	printf("booleanexp> %lf <= %lf -> false\n", val1, val2);
+	return 0.0;
+}
+
+double gt(double val1, double val2){
+	if (val1 > val2) {
+		printf("booleanexp> %lf > %lf -> true\n", val1, val2);
+		return 1.0;
+	}
+	printf("booleanexp> %lf > %lf -> false\n", val1, val2);
+	return 0.0;
+}
+
+double gte(double val1, double val2){
+	if (val1 >= val2) {
+		printf("booleanexp> %lf >= %lf -> true\n", val1, val2);
+		return 1.0;
+	}
+	printf("booleanexp> %lf >= %lf -> false\n", val1, val2);
+	return 0.0;
 }
 
 int main (void) {

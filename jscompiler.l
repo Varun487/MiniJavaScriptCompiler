@@ -54,10 +54,13 @@ int yylex();
 "||"					{printf("T_OR "); return T_OR;}
 "!"						{printf("T_NOT "); return T_NOT;}
 "."						{printf("T_DOT "); return T_DOT;}
-"++"					{printf("T_INCREMENT "); return T_INCREMENT;}
-"--"					{printf("T_DECREMENT "); return T_DECREMENT;}
-"+="					{printf("T_INC_ASSIGN "); return T_INC_ASSIGN;}
-"-="					{printf("T_DEC_ASSIGN "); return T_DEC_ASSIGN;}
+"++"					{/* printf("T_INCREMENT "); */ return T_INCREMENT;}
+"--"					{/* printf("T_DECREMENT "); */ return T_DECREMENT;}
+"+="					{/* printf("T_INC_ASSIGN "); */ return T_INC_ASSIGN;}
+"-="					{/* printf("T_DEC_ASSIGN "); */ return T_DEC_ASSIGN;}
+"*=" 					{/* printf("T_MUL_ASSIGN "); */ return T_MUL_ASSIGN;}
+"/=" 					{/* printf("T_DIV_ASSIGN "); */ return T_DIV_ASSIGN;}
+"%=" 					{/* printf("T_REM_ASSIGN "); */ return T_REM_ASSIGN;}
 
 [ \t]                  ;
 .                      {ECHO; yyerror ("unexpected character");}
