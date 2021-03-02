@@ -7,14 +7,6 @@ int yylex();
 #include <ctype.h>
 #include <string.h>
 
-struct identifier{
-    char var_name[31];
-	union data {
-		char str[100]; 
-		double num;
-	} data;
-} identifier;
-
 // prints a number to stdout
 void print_number(double number);
 
@@ -24,11 +16,47 @@ char *convert_string(char *string);
 // prints a string to stdout
 void print_string(char *string);
 
-// Primitive symbol table implementation
-int symbols[52];
+// struct for identifer
+struct identifier{
+    char *id;
+	int datatype_flag;
+	int occupied;
+	union data {
+		char *str; 
+		double num;
+	} data;
+} identifier;
+
+/*
+In datatype flag
+0 -> double
+1 -> str
+2 -> true
+3 -> false
+4 -> undefined
+5 -> null
+*/
+
+// symbol table
+struct identifier symbol_table[100];
+
+// Makes identifier string
+char *convert_identifer(char *identifer);
+
+// get the index of an existing entry or to add a new entry
+int compute_symbol_index(char *symbol);
+
+// Updates symbol table with a variable of number type
+void update_symbol_table_number(char *symbol, double val);
+
+// Updates symbol table with a variable of string type
+void update_symbol_table_string(char *symbol, char *val);
+
+// Updates symbol table with a variable of boolean type
+void update_symbol_table_bool(char *symbol, int type);
 
 // Given symbol character, will look up value int of that in symbol table
-int getSymbolVal(char symbol);
+int  getSymbolVal(char symbol);
 
 // Given symbol and value, will make sure that the respective symbol gets that value
 void updateSymbolVal(char symbol, int val);
@@ -72,6 +100,7 @@ void updateSymbolVal(char symbol, int val);
 %token T_NULL 
 %token T_BREAK 
 %token T_FOR 
+%token T_WHILE
 %token T_LET 
 %token T_VAR 
 %token T_CONST 
@@ -115,21 +144,34 @@ void updateSymbolVal(char symbol, int val);
 
 /* descriptions of expected inputs corresponding actions (in C) */
 
-line    : T_SINGLE_COMMENT end						{;}
-		| line T_SINGLE_COMMENT end 				{;}
-		| T_PRINT print_exp 						{;}
-		| line T_PRINT print_exp 					{;}
-		| T_VAR T_IDENTIFIER T_ASSIGN val 			{;}
-		| line T_VAR T_IDENTIFIER T_ASSIGN val 		{;}
+line    : T_SINGLE_COMMENT end									{;}
+		| line T_SINGLE_COMMENT end 							{;}
+		| T_PRINT print_exp 									{;}
+		| line T_PRINT print_exp 								{;}
+		| T_VAR identifier_exp 									{;}
+		| line T_VAR identifier_exp 							{;}
+		| identifier_exp 										{;}
+		| line identifier_exp 									{;}
 		;
 
-print_exp 	: T_OPEN_BRACKET T_NUMBER T_CLOSE_BRACKET end {print_number($2);}
-			| T_OPEN_BRACKET T_STRING T_CLOSE_BRACKET end {print_string($2);}
+print_exp 	: T_OPEN_BRACKET print_val T_CLOSE_BRACKET end 		{;}
 			;
 
-val 	: T_NUMBER end								{printf("\nAssigned %lf\n", $1);}
-		| T_STRING end 								{printf("\nAssigned ");print_string($1);}
-		;
+print_val 	: T_NUMBER 								{print_number($1);}
+			| T_STRING								{print_string($1);}
+			| T_TRUE								{printf("output> true\n");}
+			| T_FALSE								{printf("output> false\n");}
+			| T_UNDEFINED							{printf("output> undefined\n");}
+			| T_NULL								{printf("output> null\n");}
+			;
+
+identifier_exp 	: T_IDENTIFIER T_ASSIGN T_NUMBER end 		{update_symbol_table_number($1, $3);}
+				| T_IDENTIFIER T_ASSIGN T_STRING end 		{update_symbol_table_string($1, $3);}
+				| T_IDENTIFIER T_ASSIGN T_TRUE end 			{update_symbol_table_bool($1, 2);}
+				| T_IDENTIFIER T_ASSIGN T_FALSE end 		{update_symbol_table_bool($1, 3);}
+				| T_IDENTIFIER T_ASSIGN T_NULL end 			{update_symbol_table_bool($1, 4);}
+				| T_IDENTIFIER T_ASSIGN T_UNDEFINED end 	{update_symbol_table_bool($1, 5);}
+				;
 
 end 	: T_NEXT_LINE								{;}
 		| T_NEXT_LINE end							{;}
@@ -140,7 +182,7 @@ end 	: T_NEXT_LINE								{;}
 %%                     /* C code */
 
 void print_number(double number) {
-	printf("\n\noutput> %0.9lf\n\n", number);
+	printf("output> %0.9lf\n", number);
 }
 
 char *convert_string(char *string) {
@@ -155,82 +197,163 @@ char *convert_string(char *string) {
 		terminator = '\'';
 	}
 
-	int i = 1;
-	
-	int len = 0;
+	// printf("\n\nconvert_string -> %s : %c\n", string, terminator);
 
-	while (string[i] != terminator) {
+	int len = 1;
+	
+	while (string[len] != terminator) {
 	 	len++;
-	 	i++;
 	}
 
-	printf("\n");
+	// printf("len: %d\n", len);
 
-	char *new_string = malloc(strlen(string)*sizeof(char));
-	
-	return "\n";
+	char *new_string = malloc(len*sizeof(char));
+
+	for (int i = 0; i < len-1; i++) {
+		new_string[i] = string[i+1];
+	}
+
+	new_string[len-1] = '\0';
+
+	// printf("new_string: %s\n", new_string);
+
+	return new_string;
 
 }
 
 void print_string(char *string) {
-
-	printf("\n\noutput> ");
-
-	int i = 1;
-
-	char terminator;
-
-	if (string[0] == '\"') {
-		terminator = '\"';
-	}
-	else {
-		terminator = '\'';
-	}
-
-	while (string[i] != terminator) {
-	 	printf("%c", string[i]);
-	 	i++;
-	}
-
-	printf("\n\n");
-
+	printf("output> %s\n", convert_string(string));
 }
 
-int computeSymbolIndex(char token)
-{
-	int idx = -1;
-	if(islower(token)) {
-		idx = token - 'a' + 26;
-	} else if(isupper(token)) {
-		idx = token - 'A';
-	}
-	return idx;
-} 
+char *convert_identifer(char *identifer) {
+	
+	char *new_identifier = malloc(31*sizeof(char));
 
-/* returns the value of a given symbol */
-int   getSymbolVal(char symbol)
-{
-	int bucket = computeSymbolIndex(symbol);
-	return symbols[bucket];
+	int i;
+
+	for (i = 0; i < 31 && identifer[i] != ' '; i++) {
+		new_identifier[i] = identifer[i];
+	}
+	
+	// printf("new_identifier: %s\n", new_identifier);
+
+	return new_identifier;
 }
 
-/* updates the value of a given symbol */
-void updateSymbolVal(char symbol, int val)
-{
-	int bucket = computeSymbolIndex(symbol);
-	symbols[bucket] = val;
+int compute_symbol_index(char *symbol) {
+	
+	// printf("symbol: %s\n", symbol);
+
+	for (int i = 0; i < 100; i++) {
+		if (symbol_table[i].occupied == 1) {
+			if (strcmp(symbol, symbol_table[i].id) == 0) {
+				return i;
+			}
+		}
+		else {
+			return i;
+		}
+	}
+}
+
+void update_symbol_table_number(char *symbol, double val) {
+
+	symbol = convert_identifer(symbol);
+
+	int index = compute_symbol_index(symbol);
+
+	symbol_table[index].occupied = 1;
+	symbol_table[index].id = symbol;
+	symbol_table[index].datatype_flag = 0;
+	symbol_table[index].data.num = val;
+
+	printf("Assigned> %s = %lf\n", symbol, val);
+	// printf("symbol: %s\n", symbol);
+	// printf("index: %d\n", index);
+
+	// printf("occupied: %d\n", symbol_table[index].occupied);
+	// printf("id: %s\n", symbol_table[index].id);
+	// printf("datatype_flag: %d\n", symbol_table[index].datatype_flag);
+	// printf("num: %lf\n", symbol_table[index].data.num);
+}
+
+void update_symbol_table_string(char *symbol, char *val) {
+
+	symbol = convert_identifer(symbol);
+	val = convert_string(val);
+
+	int index = compute_symbol_index(symbol);
+
+	symbol_table[index].occupied = 1;
+	symbol_table[index].id = symbol;
+	symbol_table[index].datatype_flag = 1;
+	symbol_table[index].data.str = val;
+
+	printf("Assigned> %s = %s\n", symbol, val);
+	// printf("symbol: %s\n", symbol);
+	// printf("index: %d\n", index);
+
+	// printf("occupied: %d\n", symbol_table[index].occupied);
+	// printf("id: %s\n", symbol_table[index].id);
+	// printf("datatype_flag: %d\n", symbol_table[index].datatype_flag);
+	// printf("str: %s\n", symbol_table[index].data.str);
+}
+
+void update_symbol_table_bool(char *symbol, int type) {
+	
+	symbol = convert_identifer(symbol);
+	int index = compute_symbol_index(symbol);
+
+	symbol_table[index].occupied = 1;
+	symbol_table[index].id = symbol;
+	symbol_table[index].datatype_flag = type;
+
+	printf("Assigned> %s = dt_%d\n", symbol, type);
+	// printf("symbol: %s\n", symbol);
+	// printf("index: %d\n", index);
+
+	// printf("occupied: %d\n", symbol_table[index].occupied);
+	// printf("id: %s\n", symbol_table[index].id);
+	// printf("datatype_flag: %d\n", symbol_table[index].datatype_flag);
 }
 
 int main (void) {
-	/* init symbol table */
+	// init symbol table
 	int i;
-	for(i=0; i<52; i++) {
-		symbols[i] = 0;
+	
+	for(i=0; i<100; i++) {
+		symbol_table[i].occupied = 0;
 	}
 
 	return yyparse ( );
 }
 
+void yyerror (char *s) {fprintf (stderr, "%s\n", s);}
+
+// int computeSymbolIndex(char token)
+// {
+// 	int idx = -1;
+// 	if(islower(token)) {
+// 		idx = token - 'a' + 26;
+// 	} else if(isupper(token)) {
+// 		idx = token - 'A';
+// 	}
+// 	return idx;
+// } 
+
+/* returns the value of a given symbol */
+// int   getSymbolVal(char symbol)
+// {
+// 	int bucket = computeSymbolIndex(symbol);
+// 	return symbols[bucket];
+// }
+
+/* updates the value of a given symbol */
+// void updateSymbolVal(char symbol, int val)
+// {
+// 	int bucket = computeSymbolIndex(symbol);
+// 	symbols[bucket] = val;
+// }
 
 // line : assignment ';'		{;}
 // 		| exit_command ';'		{exit(EXIT_SUCCESS);}
@@ -253,5 +376,3 @@ int main (void) {
 // term   	: number                {$$ = $1;}
 // 		| identifier			{$$ =   getSymbolVal($1);} 
 //         ;
-
-void yyerror (char *s) {fprintf (stderr, "%s\n", s);}

@@ -45,12 +45,18 @@ make
 - CFG and Parsing (Syntax validation)
 	- Print number ```DONE```
 	- Print string ```DONE``` ```BUGS```
-	- Assign Variable
+	- Print Boolean ```DONE```
+	- Print null, undefined ```DONE```
+	- Assign Variable ```DONE``` ```BUGS```
 		- number
 		- string
+		- Boolean
+		- null, undefined
 	- Print Varible
 		- number
 		- string
+		- Boolean
+		- null, undefined
 	- Simple math expressions
 		- Assign variable after computing numeric expression
 		- Assign variable after computing string expression
@@ -61,14 +67,14 @@ make
 	- Boolean operations on variables
 	- Increment and decrement variables
 	- For loop computation
+	- While loop computation
 	- Recognising errors and suggesting fix
 	- Evaluate complex math expressions?
-	- Objects?
-	- Dot notation?
-	- Functions?
 - BUGS
 	- Multiline comments not working
 	- if a file ends with unterminated comments, return error
 	- Fix Inline comment after a statement
 	- Evaluate special charaters in a string
 	- Produce error if string not terminated properly or partially terminated
+	- Not able to recognise if variable is redeclared
+	- Not able to recognise if variable is undeclared

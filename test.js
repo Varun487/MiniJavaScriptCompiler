@@ -26,6 +26,11 @@ console.log("");
 console.log('hi');
 console.log('');
 
+// Print some key words
+console.log(true); console.log(false);
+console.log(undefined)
+console.log(null);
+
 // Evaluate special characters in string, Produce error when string not completed properly -> BUG
 console.log("special characters: !@#$%^&*()<>/':-_+=\n\t"stringisnotdone")
 
@@ -33,3 +38,14 @@ console.log("special characters: !@#$%^&*()<>/':-_+=\n\t"stringisnotdone")
 var abc = 1;
 var a = 2
 var def = "hello";
+a = 3
+var diff = "new";
+var t = true
+t = false;
+var n = null
+var back = undefined;
+
+// for loop
+// for (var i = 0; i < 3; i++) {
+// 	console.log(i);
+// }
