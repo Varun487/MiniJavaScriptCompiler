@@ -45,6 +45,20 @@ t = false;
 var n = null
 var back = undefined;
 
+// print variable
+console.log(abc)
+abc = 12
+console.log(abc);
+console.log(a);
+console.log(def)
+def = "bye";
+console.log(def)
+console.log(diff);
+console.log(t);
+console.log(n);
+console.log(back);
+console.log(doesntexist);
+
 // for loop
 // for (var i = 0; i < 3; i++) {
 // 	console.log(i);

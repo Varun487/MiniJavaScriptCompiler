@@ -55,6 +55,14 @@ void update_symbol_table_string(char *symbol, char *val);
 // Updates symbol table with a variable of boolean type
 void update_symbol_table_bool(char *symbol, int type);
 
+// Given symbol character, will look up value of identifier in symbol table
+// returns a void pointer to the value of the symbol and
+// sets the type value to the datatype of the value
+void *get_symbol_value(char *symbol, int *type);
+
+// print the value of an identifier
+void print_identifier(char *symbol);
+
 // Given symbol character, will look up value int of that in symbol table
 int  getSymbolVal(char symbol);
 
@@ -163,6 +171,7 @@ print_val 	: T_NUMBER 								{print_number($1);}
 			| T_FALSE								{printf("output> false\n");}
 			| T_UNDEFINED							{printf("output> undefined\n");}
 			| T_NULL								{printf("output> null\n");}
+			| T_IDENTIFIER							{print_identifier($1);}
 			;
 
 identifier_exp 	: T_IDENTIFIER T_ASSIGN T_NUMBER end 		{update_symbol_table_number($1, $3);}
@@ -317,6 +326,70 @@ void update_symbol_table_bool(char *symbol, int type) {
 	// printf("datatype_flag: %d\n", symbol_table[index].datatype_flag);
 }
 
+void *get_symbol_value(char *symbol, int *type) {
+
+	// printf("getsymbol> %s\n", symbol);
+
+	int index = compute_symbol_index(symbol);
+
+	void *dummy;
+
+	if (symbol_table[index].occupied == 0) {
+		*type = -1;
+		return dummy;
+	}
+
+	*type = symbol_table[index].datatype_flag;
+
+	switch(*type) {
+		case 0:
+			return (void*) &symbol_table[index].data.num;
+			break;
+		
+		case 1:
+			return (void*) symbol_table[index].data.str;
+			break;
+		
+		default:
+			return dummy;
+			break;
+	}
+
+}
+
+// print the value of an identifier
+void print_identifier(char *symbol) {
+	
+	int type = 0;
+	
+	void *void_val = get_symbol_value(symbol, &type);
+
+	if (type == 0) {
+		double *int_val = (double *) void_val;
+		printf("printidentifier> %s -> %lf\n", symbol, *int_val);
+	}
+	else if (type == 1) {
+		char *char_val = (char *) void_val;
+		printf("printidentifier> %s -> %s\n", symbol, char_val);
+	}
+	else if (type == 2) {
+		printf("printidentifier> %s -> true\n", symbol);
+	}
+	else if (type == 3) {
+		printf("printidentifier> %s -> false\n", symbol);
+	}
+	else if (type == 4) {
+		printf("printidentifier> %s -> null\n", symbol);
+	}
+	else if (type == 5) {
+		printf("printidentifier> %s -> undefined\n", symbol);
+	}
+	else {
+		printf("printidentifier> ERROR: No variable called %s\n", symbol);
+	}
+
+}
+
 int main (void) {
 	// init symbol table
 	int i;
@@ -329,50 +402,3 @@ int main (void) {
 }
 
 void yyerror (char *s) {fprintf (stderr, "%s\n", s);}
-
-// int computeSymbolIndex(char token)
-// {
-// 	int idx = -1;
-// 	if(islower(token)) {
-// 		idx = token - 'a' + 26;
-// 	} else if(isupper(token)) {
-// 		idx = token - 'A';
-// 	}
-// 	return idx;
-// } 
-
-/* returns the value of a given symbol */
-// int   getSymbolVal(char symbol)
-// {
-// 	int bucket = computeSymbolIndex(symbol);
-// 	return symbols[bucket];
-// }
-
-/* updates the value of a given symbol */
-// void updateSymbolVal(char symbol, int val)
-// {
-// 	int bucket = computeSymbolIndex(symbol);
-// 	symbols[bucket] = val;
-// }
-
-// line : assignment ';'		{;}
-// 		| exit_command ';'		{exit(EXIT_SUCCESS);}
-// 		| print exp ';'			{printf("> %d\n", $2);}
-// 		| console_log exp ';'	{printf("> %d\n", $2);}
-// 		| line assignment ';'	{;}
-// 		| line print exp ';'	{printf("> %d\n", $3);}
-// 		| line console_log exp ';'	{printf("> %d\n", $3);}
-// 		| line exit_command ';'	{exit(EXIT_SUCCESS);}
-//         ;
-
-// assignment : identifier '=' exp  { updateSymbolVal($1,$3); }
-// 			;
-
-// exp    	: term                  {$$ = $1;}
-//        	| exp '+' term          {$$ = $1 + $3;}
-//        	| exp '-' term          {$$ = $1 - $3;}
-//        	;
-
-// term   	: number                {$$ = $1;}
-// 		| identifier			{$$ =   getSymbolVal($1);} 
-//         ;

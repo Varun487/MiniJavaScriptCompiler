@@ -52,11 +52,15 @@ make
 		- string
 		- Boolean
 		- null, undefined
-	- Print Varible
+	- Print Varible ```DONE```
 		- number
 		- string
 		- Boolean
 		- null, undefined
+	- Boolean operations on variables
+	- Increment and decrement variables
+	- For loop computation
+	- While loop computation
 	- Simple math expressions
 		- Assign variable after computing numeric expression
 		- Assign variable after computing string expression
@@ -64,10 +68,6 @@ make
 		- Print after computing numeric expression
 		- Print after computing string expression
 		- Print after computing string and numeric combination expression		
-	- Boolean operations on variables
-	- Increment and decrement variables
-	- For loop computation
-	- While loop computation
 	- Recognising errors and suggesting fix
 	- Evaluate complex math expressions?
 - BUGS
