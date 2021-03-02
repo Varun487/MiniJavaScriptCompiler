@@ -57,17 +57,13 @@ make
 		- string
 		- Boolean
 		- null, undefined
+	- Simple math expressions ```DONE``` ```BUGS```
 	- Boolean operations on variables
 	- Increment and decrement variables
 	- For loop computation
 	- While loop computation
-	- Simple math expressions
-		- Assign variable after computing numeric expression
-		- Assign variable after computing string expression
-		- Assign variable after computing string and numeric combination expression
-		- Print after computing numeric expression
-		- Print after computing string expression
-		- Print after computing string and numeric combination expression		
+	- Print combination of types
+	- String computations
 	- Recognising errors and suggesting fix
 	- Evaluate complex math expressions?
 - BUGS
@@ -78,3 +74,6 @@ make
 	- Produce error if string not terminated properly or partially terminated
 	- Not able to recognise if variable is redeclared
 	- Not able to recognise if variable is undeclared
+	- For printing math expressions, there must be space b/w the numbers and operators
+	- % operator is not accurate due to type conversion
+	- Can't do any operations on identifiers ```IMPORTANT```

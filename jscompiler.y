@@ -69,6 +69,12 @@ int  getSymbolVal(char symbol);
 // Given symbol and value, will make sure that the respective symbol gets that value
 void updateSymbolVal(char symbol, int val);
 
+// Get % of 2 numbers
+double rem(double a, double b);
+
+// Gets the double value of an identifier
+double get_id_num(char *symbol);
+
 %}
 
 /* Yacc definitions */
@@ -145,7 +151,7 @@ void updateSymbolVal(char symbol, int val);
 %token <id> T_IDENTIFIER
 
 // Assign types to non terminals on left side of grammar
-// %type <num> line exp term
+%type <num> math_exp
 // %type <id> assignment
 
 %%
@@ -160,6 +166,12 @@ line    : T_SINGLE_COMMENT end									{;}
 		| line T_VAR identifier_exp 							{;}
 		| identifier_exp 										{;}
 		| line identifier_exp 									{;}
+		| math_exp end											{;}
+		| line math_exp end										{;}
+		/* | T_FOR for_exp 										{;} */
+		/* | line T_FOR for_exp 									{;} */
+		/* | T_WHILE while_exp 									{;} */
+		/* | line T_WHILE while_exp 								{;} */
 		;
 
 print_exp 	: T_OPEN_BRACKET print_val T_CLOSE_BRACKET end 		{;}
@@ -172,6 +184,7 @@ print_val 	: T_NUMBER 								{print_number($1);}
 			| T_UNDEFINED							{printf("output> undefined\n");}
 			| T_NULL								{printf("output> null\n");}
 			| T_IDENTIFIER							{print_identifier($1);}
+			| math_exp 								{print_number($1);}
 			;
 
 identifier_exp 	: T_IDENTIFIER T_ASSIGN T_NUMBER end 		{update_symbol_table_number($1, $3);}
@@ -180,7 +193,20 @@ identifier_exp 	: T_IDENTIFIER T_ASSIGN T_NUMBER end 		{update_symbol_table_numb
 				| T_IDENTIFIER T_ASSIGN T_FALSE end 		{update_symbol_table_bool($1, 3);}
 				| T_IDENTIFIER T_ASSIGN T_NULL end 			{update_symbol_table_bool($1, 4);}
 				| T_IDENTIFIER T_ASSIGN T_UNDEFINED end 	{update_symbol_table_bool($1, 5);}
+				| T_IDENTIFIER T_ASSIGN math_exp 			{update_symbol_table_number($1, $3);}
 				;
+
+math_exp 	: T_NUMBER '+' T_NUMBER 				{$$ = $1 + $3;}
+			| T_NUMBER '-' T_NUMBER 				{$$ = $1 - $3;}
+			| T_NUMBER '*' T_NUMBER 				{$$ = $1 * $3;}			
+			| T_NUMBER '/' T_NUMBER 				{$$ = $1 / $3;}
+			| T_NUMBER '%' T_NUMBER 				{$$ = rem($1, $3);}
+			| math_exp '+' T_NUMBER 				{$$ = $1 + $3;}
+			| math_exp '-' T_NUMBER 				{$$ = $1 - $3;}
+			| math_exp '*' T_NUMBER 				{$$ = $1 * $3;}			
+			| math_exp '/' T_NUMBER 				{$$ = $1 / $3;}
+			| math_exp '%' T_NUMBER 				{$$ = rem($1, $3);}
+			;
 
 end 	: T_NEXT_LINE								{;}
 		| T_NEXT_LINE end							{;}
@@ -360,6 +386,8 @@ void *get_symbol_value(char *symbol, int *type) {
 // print the value of an identifier
 void print_identifier(char *symbol) {
 	
+	symbol = convert_identifer(symbol);
+
 	int type = 0;
 	
 	void *void_val = get_symbol_value(symbol, &type);
@@ -388,6 +416,15 @@ void print_identifier(char *symbol) {
 		printf("printidentifier> ERROR: No variable called %s\n", symbol);
 	}
 
+}
+
+double rem(double a, double b) {
+	return (int)a % (int)b;
+}
+
+double get_id_num(char *symbol) {
+	int type = 0;
+	return *(double *)get_symbol_value(symbol, &type);
 }
 
 int main (void) {

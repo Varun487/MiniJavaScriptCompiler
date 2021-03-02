@@ -33,16 +33,16 @@ int yylex();
 "const"				   {printf("T_CONST "); return T_CONST;}
 "continue"			   {printf("T_CONTINUE "); return T_CONTINUE;}
 
--?[0-9]+(\.[0-9]+)?		    {/* printf("T_NUMBER "); */ char *ptr; yylval.num = strtod(yytext, &ptr); return T_NUMBER;}
+-?[0-9]+(\.[0-9]+)?		    {/* printf("T_NUMBER "); */char *ptr; yylval.num = strtod(yytext, &ptr); return T_NUMBER;}
 \".*\"		   	   			{/* printf("T_STRING "); */ yylval.str = yytext; return T_STRING;}
 \'.*\'		   	   			{/* printf("T_STRING "); */ yylval.str = yytext; return T_STRING;}
 [a-zA-z_$][a-zA-z0-9_$]*	{/* printf("T_IDENTIFIER "); */ yylval.id = yytext; return T_IDENTIFIER;}
 
-"+"						{printf("T_ADD "); return T_ADD;}
-"-"						{printf("T_SUB "); return T_SUB;}
-"*"						{printf("T_MUL "); return T_MUL;}
-"/"						{printf("T_DIV "); return T_DIV;}
-"%"						{printf("T_REM "); return T_REM;}
+"+"						{return '+';}
+"-"						{return '-';}
+"*"						{return '*';}
+"/"						{return '/';}
+"%"						{return '%';}
 "="						{/* printf("T_ASSIGN "); */ return T_ASSIGN;}
 "=="					{printf("T_EQ ");  return T_EQ;}
 "!="					{printf("T_NEQ ");  return T_NEQ;}

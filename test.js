@@ -59,7 +59,26 @@ console.log(n);
 console.log(back);
 console.log(doesntexist);
 
-// for loop
+// math expressions
+1 + 3
+1 - 3;
+1 * 3
+1 / 3;
+1 % 3
+
+console.log(1 + 3);
+console.log(1 - 3);
+console.log(1 * 3);
+console.log(1 / 3);
+console.log(1 % 3);
+
+console.log(1 + 3 - 2);
+console.log(2 * 2 - 1);
+
+var test = 1;
+console.log(test);
+
+// for loop test
 // for (var i = 0; i < 3; i++) {
 // 	console.log(i);
 // }
