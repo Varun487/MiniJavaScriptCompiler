@@ -66,7 +66,8 @@ make
 	- While loop
 		- syntax validation ```DONE```
 		- computation
-	- Print line number of errors 
+	- Print line number of syntax errors ```DONE```
+	- Print col number of syntax errors
 	- Print combination of types
 	- String computations
 	- Recognising errors and suggesting fix

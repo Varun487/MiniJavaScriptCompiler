@@ -102,7 +102,8 @@ test = 4
 
 test == 3
 3 == test;
-test == abc
+// syntax error
+// test == 
 test < 3
 test <= 3
 test > 3
@@ -122,6 +123,7 @@ for ( i = 0; i < 3; i++)
 	console.log(3); 
 }
 
+// syntax error
 // for ( i = 0; i < 3; i++)
 
 // 	console.log(3); 
@@ -144,6 +146,7 @@ while (j < 3)
 	j++;
 }
 
+// syntax error
 // while j < 3 {
 // 	console.log(j);
 // }

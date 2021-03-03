@@ -2,6 +2,8 @@
 // called in case of syntactical errors
 void yyerror (char *s);
 int yylex();
+extern int yylineno;
+
 #include <stdio.h>     /* C declarations used in actions */
 #include <stdlib.h>
 #include <ctype.h>
@@ -114,6 +116,8 @@ double gte(double val1, double val2);
 %}
 
 /* Yacc definitions */
+
+%locations
 
 // Specify the different types that the lexical analyser can return
 // Similar to union in c
@@ -688,4 +692,6 @@ int main (void) {
 	return yyparse ( );
 }
 
-void yyerror (char *s) {fprintf (stderr, "%s at line\n", s);}
+void yyerror (char *s) {
+	fprintf (stderr, "%s at line %d\n", s, yylineno);
+}

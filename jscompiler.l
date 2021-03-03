@@ -4,6 +4,8 @@ void yyerror (char *s);
 int yylex();
 %}
 
+%option yylineno
+
 %%
 
 "console.log"		   {/* printf("T_PRINT "); */ return T_PRINT;}
@@ -27,7 +29,7 @@ int yylex();
 "null"				   {/* printf("T_NULL "); */ return T_NULL;}
 "break"				   {printf("T_BREAK "); return T_BREAK;}
 "for"				   {/* printf("T_FOR "); */ return T_FOR;}
-"while"				   {printf("T_WHILE "); return T_WHILE;}
+"while"				   {/* printf("T_WHILE "); */ return T_WHILE;}
 "let"				   {printf("T_LET "); return T_LET;}
 "var"				   {/* printf("T_VAR "); */ return T_VAR;}
 "const"				   {printf("T_CONST "); return T_CONST;}
