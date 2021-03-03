@@ -160,10 +160,6 @@ double gte(double val1, double val2);
 %token T_CONST 
 %token T_CONTINUE 
 
-// %token T_NUMBER 
-// %token T_STRING 
-// %token T_IDENTIFIER 
-
 %token T_ADD 
 %token T_SUB 
 %token T_MUL 
@@ -257,10 +253,10 @@ print_exp 	: T_OPEN_BRACKET print_val T_CLOSE_BRACKET end 		{;}
 
 print_val 	: T_NUMBER 								{print_number($1);}
 			| T_STRING								{print_string($1);}
-			| T_TRUE								{printf("output> true\n");}
-			| T_FALSE								{printf("output> false\n");}
-			| T_UNDEFINED							{printf("output> undefined\n");}
-			| T_NULL								{printf("output> null\n");}
+			| T_TRUE								{printf("log> true\n");}
+			| T_FALSE								{printf("log> false\n");}
+			| T_UNDEFINED							{printf("log> undefined\n");}
+			| T_NULL								{printf("log> null\n");}
 			| T_IDENTIFIER							{print_identifier($1);}
 			| math_exp 								{print_number($1);}
 			;
@@ -330,7 +326,7 @@ end 	: T_NEXT_LINE								{;}
 %%                     /* C code */
 
 void print_number(double number) {
-	printf("output> %0.9lf\n", number);
+	printf("log> %0.9lf\n", number);
 }
 
 char *convert_string(char *string) {
@@ -370,7 +366,7 @@ char *convert_string(char *string) {
 }
 
 void print_string(char *string) {
-	printf("output> %s\n", convert_string(string));
+	printf("log> %s\n", convert_string(string));
 }
 
 char *convert_identifer(char *identifer) {
@@ -415,7 +411,7 @@ void update_symbol_table_number(char *symbol, double val) {
 	symbol_table[index].datatype_flag = 0;
 	symbol_table[index].data.num = val;
 
-	printf("Assigned> %s = %lf\n", symbol, val);
+	// printf("Assigned> %s = %lf\n", symbol, val);
 	// printf("symbol: %s\n", symbol);
 	// printf("index: %d\n", index);
 
@@ -437,7 +433,7 @@ void update_symbol_table_string(char *symbol, char *val) {
 	symbol_table[index].datatype_flag = 1;
 	symbol_table[index].data.str = val;
 
-	printf("Assigned> %s = %s\n", symbol, val);
+	// printf("Assigned> %s = %s\n", symbol, val);
 	// printf("symbol: %s\n", symbol);
 	// printf("index: %d\n", index);
 
@@ -456,7 +452,7 @@ void update_symbol_table_bool(char *symbol, int type) {
 	symbol_table[index].id = symbol;
 	symbol_table[index].datatype_flag = type;
 
-	printf("Assigned> %s = dt_%d\n", symbol, type);
+	// printf("Assigned> %s = dt_%d\n", symbol, type);
 	// printf("symbol: %s\n", symbol);
 	// printf("index: %d\n", index);
 
@@ -507,26 +503,27 @@ void print_identifier(char *symbol) {
 
 	if (type == 0) {
 		double *int_val = (double *) void_val;
-		printf("printidentifier> %s -> %lf\n", symbol, *int_val);
+		printf("logid> %s: %lf\n", symbol, *int_val);
 	}
 	else if (type == 1) {
 		char *char_val = (char *) void_val;
-		printf("printidentifier> %s -> %s\n", symbol, char_val);
+		printf("logid> %s: %s\n", symbol, char_val);
 	}
 	else if (type == 2) {
-		printf("printidentifier> %s -> true\n", symbol);
+		printf("logid> %s: true\n", symbol);
 	}
 	else if (type == 3) {
-		printf("printidentifier> %s -> false\n", symbol);
+		printf("logid> %s: false\n", symbol);
 	}
 	else if (type == 4) {
-		printf("printidentifier> %s -> null\n", symbol);
+		printf("logid> %s: null\n", symbol);
 	}
 	else if (type == 5) {
-		printf("printidentifier> %s -> undefined\n", symbol);
+		printf("logid> %s: undefined\n", symbol);
 	}
 	else {
-		printf("printidentifier> ERROR: No variable called %s\n", symbol);
+		// yyerror("ERROR: No variable called %s\n", symbol);
+		printf("logid> ERROR: No variable called %s\n", symbol);
 	}
 
 }

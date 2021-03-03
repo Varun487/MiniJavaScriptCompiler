@@ -32,7 +32,7 @@ console.log(undefined)
 console.log(null);
 
 // Evaluate special characters in string, Produce error when string not completed properly -> BUG
-console.log("special characters: !@#$%^&*()<>/':-_+=\n\t"stringisnotdone")
+// console.log("special characters: !@#$%^&*()<>/':-_+=\n\t"stringisnotdone")
 
 // variable assignment
 var abc = 1;
