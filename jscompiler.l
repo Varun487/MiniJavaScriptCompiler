@@ -10,8 +10,8 @@ int yylex();
 
 "("					   {/* printf("T_OPEN_BRACKET "); */ return T_OPEN_BRACKET;}
 ")"					   {/* printf("T_CLOSE_BRACKET "); */ return T_CLOSE_BRACKET;}
-"{"					   {printf("T_OPEN_CURLY "); return T_OPEN_CURLY;}
-"}"					   {printf("T_CLOSE_CURLY "); return T_CLOSE_CURLY;}
+"{"					   {/* printf("T_OPEN_CURLY "); */ return T_OPEN_CURLY;}
+"}"					   {/* printf("T_CLOSE_CURLY "); */ return T_CLOSE_CURLY;}
 "["					   {printf("T_OPEN_SQUARE "); return T_OPEN_SQUARE;}
 "]"					   {printf("T_CLOSE_SQUARE "); return T_CLOSE_SQUARE;}
 
@@ -26,7 +26,7 @@ int yylex();
 "undefined"			   {/* printf("T_UNDEFINED "); */ return T_UNDEFINED;}
 "null"				   {/* printf("T_NULL "); */ return T_NULL;}
 "break"				   {printf("T_BREAK "); return T_BREAK;}
-"for"				   {printf("T_FOR "); return T_FOR;}
+"for"				   {/* printf("T_FOR "); */ return T_FOR;}
 "while"				   {printf("T_WHILE "); return T_WHILE;}
 "let"				   {printf("T_LET "); return T_LET;}
 "var"				   {/* printf("T_VAR "); */ return T_VAR;}
@@ -44,12 +44,12 @@ int yylex();
 "/"						{return '/';}
 "%"						{return '%';}
 "="						{/* printf("T_ASSIGN "); */ return T_ASSIGN;}
-"=="					{printf("T_EQ ");  return T_EQ;}
-"!="					{printf("T_NEQ ");  return T_NEQ;}
-"<"						{printf("T_LT "); return T_LT;}
-"<="					{printf("T_LTE "); return T_LTE;}
-">"						{printf("T_GT "); return T_GT;}
-">="					{printf("T_GTE "); return T_GTE;}
+"=="					{/* printf("T_EQ "); */ return T_EQ;}
+"!="					{/* printf("T_NEQ "); */ return T_NEQ;}
+"<"						{/* printf("T_LT "); */ return T_LT;}
+"<="					{/* printf("T_LTE "); */ return T_LTE;}
+">"						{/* printf("T_GT "); */ return T_GT;}
+">="					{/* printf("T_GTE "); */ return T_GTE;}
 "&&"					{printf("T_AND "); return T_AND;}
 "||"					{printf("T_OR "); return T_OR;}
 "!"						{printf("T_NOT "); return T_NOT;}

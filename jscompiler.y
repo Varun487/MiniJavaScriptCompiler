@@ -201,19 +201,52 @@ line    : T_SINGLE_COMMENT end									{;}
 		| line T_SINGLE_COMMENT end 							{;}
 		| T_PRINT print_exp 									{;}
 		| line T_PRINT print_exp 								{;}
-		| T_VAR identifier_exp 									{;}
-		| line T_VAR identifier_exp 							{;}
-		| identifier_exp 										{;}
-		| line identifier_exp 									{;}
+		| T_VAR identifier_exp end 								{;}
+		| line T_VAR identifier_exp end 						{;}
+		| identifier_exp end 									{;}
+		| line identifier_exp end 								{;}
 		| math_exp end											{;}
 		| line math_exp end										{;}
 		| boolean_exp end 										{;}
 		| line boolean_exp end 									{;}
-		/* | T_FOR for_exp 										{;} */
-		/* | line T_FOR for_exp 								{;} */
-		/* | T_WHILE while_exp 									{;} */
-		/* | line T_WHILE while_exp 							{;} */
+		| T_FOR for_exp 										{;}
+		| line T_FOR for_exp 									{;}
+		| T_WHILE while_exp 									{;}
+		| line T_WHILE while_exp 								{;}
 		;
+
+
+while_exp 	: T_OPEN_BRACKET while_condition T_CLOSE_BRACKET   		T_OPEN_CURLY 		 line 		  T_CLOSE_CURLY end {;}
+			| T_OPEN_BRACKET while_condition T_CLOSE_BRACKET   		T_OPEN_CURLY 		 line for_sep T_CLOSE_CURLY end {;}
+			| T_OPEN_BRACKET while_condition T_CLOSE_BRACKET   		T_OPEN_CURLY for_sep line 		  T_CLOSE_CURLY end {;}
+			| T_OPEN_BRACKET while_condition T_CLOSE_BRACKET   		T_OPEN_CURLY for_sep line for_sep T_CLOSE_CURLY end {;}
+			| T_OPEN_BRACKET while_condition T_CLOSE_BRACKET for_sep T_OPEN_CURLY 		 line 		  T_CLOSE_CURLY end {;}
+			| T_OPEN_BRACKET while_condition T_CLOSE_BRACKET for_sep T_OPEN_CURLY 		 line for_sep T_CLOSE_CURLY end {;}
+			| T_OPEN_BRACKET while_condition T_CLOSE_BRACKET for_sep T_OPEN_CURLY for_sep line 		  T_CLOSE_CURLY end {;}
+			| T_OPEN_BRACKET while_condition T_CLOSE_BRACKET for_sep T_OPEN_CURLY for_sep line for_sep T_CLOSE_CURLY end {;}
+			;
+
+while_condition : 	boolean_exp 		{;}
+				;
+
+
+
+for_exp 	: T_OPEN_BRACKET for_conditions T_CLOSE_BRACKET   		T_OPEN_CURLY 		 line 		  T_CLOSE_CURLY end {;}
+			| T_OPEN_BRACKET for_conditions T_CLOSE_BRACKET   		T_OPEN_CURLY 		 line for_sep T_CLOSE_CURLY end {;}
+			| T_OPEN_BRACKET for_conditions T_CLOSE_BRACKET   		T_OPEN_CURLY for_sep line 		  T_CLOSE_CURLY end {;}
+			| T_OPEN_BRACKET for_conditions T_CLOSE_BRACKET   		T_OPEN_CURLY for_sep line for_sep T_CLOSE_CURLY end {;}
+			| T_OPEN_BRACKET for_conditions T_CLOSE_BRACKET for_sep T_OPEN_CURLY 		 line 		  T_CLOSE_CURLY end {;}
+			| T_OPEN_BRACKET for_conditions T_CLOSE_BRACKET for_sep T_OPEN_CURLY 		 line for_sep T_CLOSE_CURLY end {;}
+			| T_OPEN_BRACKET for_conditions T_CLOSE_BRACKET for_sep T_OPEN_CURLY for_sep line 		  T_CLOSE_CURLY end {;}
+			| T_OPEN_BRACKET for_conditions T_CLOSE_BRACKET for_sep T_OPEN_CURLY for_sep line for_sep T_CLOSE_CURLY end {;}
+			;
+
+for_sep 	: T_NEXT_LINE 										{;}
+			| for_sep T_NEXT_LINE 								{;}
+			;
+
+for_conditions	: identifier_exp T_SEMICOLON boolean_exp T_SEMICOLON identifier_exp {;}
+				;
 
 print_exp 	: T_OPEN_BRACKET print_val T_CLOSE_BRACKET end 		{;}
 			;
@@ -254,22 +287,22 @@ boolean_exp 	: T_NUMBER T_EQ T_NUMBER 			{$$ = eq($1, $3);}
 				| T_IDENTIFIER T_GTE T_IDENTIFIER 	{$$ = gte(get_id_num($1), get_id_num($3));}
 				;
 
-identifier_exp 	: T_IDENTIFIER T_ASSIGN T_NUMBER end 		{update_symbol_table_number($1, $3);}
-				| T_IDENTIFIER T_ASSIGN T_STRING end 		{update_symbol_table_string($1, $3);}
-				| T_IDENTIFIER T_ASSIGN T_TRUE end 			{update_symbol_table_bool($1, 2);}
-				| T_IDENTIFIER T_ASSIGN T_FALSE end 		{update_symbol_table_bool($1, 3);}
-				| T_IDENTIFIER T_ASSIGN T_NULL end 			{update_symbol_table_bool($1, 4);}
-				| T_IDENTIFIER T_ASSIGN T_UNDEFINED end 	{update_symbol_table_bool($1, 5);}
-				| T_IDENTIFIER T_ASSIGN math_exp end 		{update_symbol_table_number($1, $3);}
-				| T_IDENTIFIER T_INCREMENT end				{increment($1);}
-				| T_IDENTIFIER T_DECREMENT end 				{decrement($1);}
-				| T_INCREMENT T_IDENTIFIER end  			{increment($2);}
-				| T_DECREMENT T_IDENTIFIER end				{decrement($2);}
-				| T_IDENTIFIER T_INC_ASSIGN T_NUMBER end 	{inc_assign($1, $3);}
-				| T_IDENTIFIER T_DEC_ASSIGN T_NUMBER end 	{dec_assign($1, $3);}
-				| T_IDENTIFIER T_MUL_ASSIGN T_NUMBER end 	{mul_assign($1, $3);}
-				| T_IDENTIFIER T_DIV_ASSIGN T_NUMBER end 	{div_assign($1, $3);}
-				| T_IDENTIFIER T_REM_ASSIGN T_NUMBER end 	{rem_assign($1, $3);}
+identifier_exp 	: T_IDENTIFIER T_ASSIGN T_NUMBER 		{update_symbol_table_number($1, $3);}
+				| T_IDENTIFIER T_ASSIGN T_STRING 		{update_symbol_table_string($1, $3);}
+				| T_IDENTIFIER T_ASSIGN T_TRUE 			{update_symbol_table_bool($1, 2);}
+				| T_IDENTIFIER T_ASSIGN T_FALSE 		{update_symbol_table_bool($1, 3);}
+				| T_IDENTIFIER T_ASSIGN T_NULL 			{update_symbol_table_bool($1, 4);}
+				| T_IDENTIFIER T_ASSIGN T_UNDEFINED 	{update_symbol_table_bool($1, 5);}
+				| T_IDENTIFIER T_ASSIGN math_exp 		{update_symbol_table_number($1, $3);}
+				| T_IDENTIFIER T_INCREMENT				{increment($1);}
+				| T_IDENTIFIER T_DECREMENT 				{decrement($1);}
+				| T_INCREMENT T_IDENTIFIER  			{increment($2);}
+				| T_DECREMENT T_IDENTIFIER				{decrement($2);}
+				| T_IDENTIFIER T_INC_ASSIGN T_NUMBER 	{inc_assign($1, $3);}
+				| T_IDENTIFIER T_DEC_ASSIGN T_NUMBER 	{dec_assign($1, $3);}
+				| T_IDENTIFIER T_MUL_ASSIGN T_NUMBER 	{mul_assign($1, $3);}
+				| T_IDENTIFIER T_DIV_ASSIGN T_NUMBER 	{div_assign($1, $3);}
+				| T_IDENTIFIER T_REM_ASSIGN T_NUMBER 	{rem_assign($1, $3);}
 				;
 
 math_exp 	: T_NUMBER '+' T_NUMBER 				{$$ = $1 + $3;}
@@ -655,4 +688,4 @@ int main (void) {
 	return yyparse ( );
 }
 
-void yyerror (char *s) {fprintf (stderr, "%s\n", s);}
+void yyerror (char *s) {fprintf (stderr, "%s at line\n", s);}

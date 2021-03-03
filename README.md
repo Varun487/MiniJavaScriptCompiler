@@ -60,8 +60,13 @@ make
 	- Simple math expressions ```DONE``` ```BUGS```
 	- Increment and decrement variables ```DONE```
 	- Boolean operations on variables ```DONE```
-	- For loop computation
-	- While loop computation
+	- For loop 
+		- syntax validation
+		- computation
+	- While loop
+		- syntax validation
+		- computation
+	- Print line number of errors 
 	- Print combination of types
 	- String computations
 	- Recognising errors and suggesting fix

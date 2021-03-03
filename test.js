@@ -108,6 +108,42 @@ test <= 3
 test > 3
 
 // for loop test
-// for (var i = 0; i < 3; i++) {
-// 	console.log(i);
+
+var i = 0;
+
+for ( i = 0; i < 3; i++) { console.log(i); }
+
+for ( i = 0; i < 3; i++) { 
+	console.log(test);
+}
+
+for ( i = 0; i < 3; i++)
+{ 
+	console.log(3); 
+}
+
+// for ( i = 0; i < 3; i++)
+
+// 	console.log(3); 
+// }
+
+// While loop test
+
+var j = 0;
+
+while (j < 3) { console.log(j); j++; }
+
+while (j < 3) { 
+	console.log(j); 
+	j++; 
+}
+
+while (j < 3) 
+{
+	console.log(j);
+	j++;
+}
+
+// while j < 3 {
+// 	console.log(j);
 // }
