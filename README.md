@@ -61,10 +61,10 @@ make
 	- Increment and decrement variables ```DONE```
 	- Boolean operations on variables ```DONE```
 	- For loop 
-		- syntax validation
+		- syntax validation ```DONE```
 		- computation
 	- While loop
-		- syntax validation
+		- syntax validation ```DONE```
 		- computation
 	- Print line number of errors 
 	- Print combination of types
