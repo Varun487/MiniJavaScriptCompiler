@@ -191,11 +191,8 @@ double gte(double val1, double val2);
 
 // Assign types to non terminals on left side of grammar
 %type <num> math_exp boolean_exp
-// %type <id> assignment
 
 %%
-
-/* descriptions of expected inputs corresponding actions (in C) */
 
 line    : T_SINGLE_COMMENT end									{;}
 		| line T_SINGLE_COMMENT end 							{;}
@@ -249,6 +246,7 @@ for_conditions	: identifier_exp T_SEMICOLON boolean_exp T_SEMICOLON identifier_e
 				;
 
 print_exp 	: T_OPEN_BRACKET print_val T_CLOSE_BRACKET end 		{;}
+			| T_OPEN_BRACKET T_CLOSE_BRACKET end 				{printf("\n");}
 			;
 
 print_val 	: T_NUMBER 								{print_number($1);}
@@ -323,7 +321,7 @@ end 	: T_NEXT_LINE								{;}
 		| T_SEMICOLON end 							{;}
 		;
 
-%%                     /* C code */
+%%
 
 void print_number(double number) {
 	printf("log> %0.9lf\n", number);
@@ -411,7 +409,7 @@ void update_symbol_table_number(char *symbol, double val) {
 	symbol_table[index].datatype_flag = 0;
 	symbol_table[index].data.num = val;
 
-	// printf("Assigned> %s = %lf\n", symbol, val);
+	printf("Assigned> %s = %lf\n", symbol, val);
 	// printf("symbol: %s\n", symbol);
 	// printf("index: %d\n", index);
 
@@ -433,7 +431,7 @@ void update_symbol_table_string(char *symbol, char *val) {
 	symbol_table[index].datatype_flag = 1;
 	symbol_table[index].data.str = val;
 
-	// printf("Assigned> %s = %s\n", symbol, val);
+	printf("Assigned> %s = %s\n", symbol, val);
 	// printf("symbol: %s\n", symbol);
 	// printf("index: %d\n", index);
 
@@ -452,7 +450,7 @@ void update_symbol_table_bool(char *symbol, int type) {
 	symbol_table[index].id = symbol;
 	symbol_table[index].datatype_flag = type;
 
-	// printf("Assigned> %s = dt_%d\n", symbol, type);
+	printf("Assigned> %s = dt_%d\n", symbol, type);
 	// printf("symbol: %s\n", symbol);
 	// printf("index: %d\n", index);
 

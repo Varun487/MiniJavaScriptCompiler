@@ -70,11 +70,3 @@ int yylex();
 %%
 
 int yywrap (void) {return 1;}
-
-// [a-zA-Z]			   	   {yylval.id = yytext[0]; return identifier;}
-// [0-9]+                  {yylval.num = atoi(yytext); return number;}
-// "print"				   {return print;}
-// "exit"				   {return exit_command;}
-// [0-9]+				   {printf("T_NUMBER\n");}
-// [ \t\n]                 ;
-// [-+=;]           	   {return yytext[0];}
