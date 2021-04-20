@@ -32,24 +32,4 @@ make
 3. Bhavan Naik - PES2201800047
 
 # TODO
-- Intermediate code generation ![FEATUREINCOMPLETE]
-	- For loop intermediate code ![INCOMPLETE]
-		- Quadruple format ![INCOMPLETE]
-		- Symbol table entries for all temp var ![INCOMPLETE]
-			- Print symbol table ![INCOMPLETE]
-	- While loop intermediate code ![INCOMPLETE]
-	- Catch semantic errors in program ![INCOMPLETE]
-		- 2 errors at least ![INCOMPLETE]
-	- README to explain design decisions and semantic errors ![INCOMPLETE]
-- Code Optimization ![FEATUREINCOMPLETE]
-- Final report ![DOCINCOMPLETE]
-
-[DONE]: https://img.shields.io/badge/DONE-brightgreen
-[INCOMPLETE]: https://img.shields.io/badge/INCOMPLETE-red
-[BUG]: https://img.shields.io/badge/BUG-red
-[BUGFIXED]: https://img.shields.io/badge/BUG-FIXED-brightgreen
-[FEATUREINCOMPLETE]: https://img.shields.io/badge/FEATURE-INCOMPLETE-red
-[FEATURECOMPLETE]: https://img.shields.io/badge/FEATURE-COMPLETE-brightgreen
-[MEETINGINCOMPLETE]: https://img.shields.io/badge/MEETING-INCOMPLETE-red
-[DOCINCOMPLETE]: https://img.shields.io/badge/DOC-INCOMPLETE-red
-[DOCCOMPLETE]: https://img.shields.io/badge/DOC-COMPLETE-brightgreen
+- Complete report

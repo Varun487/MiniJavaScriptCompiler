@@ -1,0 +1,19 @@
+mov t0 10
+mov n t0
+mov t1 0
+mov c t1
+mov t2 0
+mov i t2
+label l0
+mov t3 i
+mov t4 n
+t5 = t3 < t4
+iffalse t5 goto l1
+mov t9 1
+mov c t9
+mov t6 i
+mov t7 1
+t8 = t6 + t7
+mov i t8
+goto l0
+label l1

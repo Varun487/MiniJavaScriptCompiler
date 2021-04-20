@@ -1,0 +1,17 @@
+t0 = 10
+a = t0
+t1 = 15
+b = t1
+t2 = a
+t3 = 10
+t4 = t2 == t3
+iftrue t4 goto l0
+goto l1
+label l0 :
+t5 = 100
+b = t5
+goto l2
+label l1 :
+t6 = 100
+a = t6
+label l2 :

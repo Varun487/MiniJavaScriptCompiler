@@ -1,0 +1,32 @@
+mov t0 10
+mov k t0
+mov t1 80
+mov grade t1
+mov t2 0
+mov i t2
+label l0
+mov t3 i
+mov t4 k
+t5 = t3 < t4
+iffalse t5 goto l1
+mov t9 grade
+mov t10 85
+t11 = t9 >= t10
+iftrue t11 goto l2
+goto l3
+label l2
+mov t12 90
+mov grade t12
+goto l4
+label l3
+mov t13 grade
+mov t14 1
+t15 = t13 + t14
+mov grade t15
+label l4
+mov t6 i
+mov t7 1
+t8 = t6 + t7
+mov i t8
+goto l0
+label l1

@@ -1,0 +1,17 @@
+mov t0 10
+mov a t0
+mov t1 15
+mov b t1
+mov t2 a
+mov t3 10
+t4 = t2 == t3
+iftrue t4 goto l0
+goto l1
+label l0
+mov t5 100
+mov b t5
+goto l2
+label l1
+mov t6 100
+mov a t6
+label l2

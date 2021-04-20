@@ -1,0 +1,117 @@
+mov t0 3
+mov t1 4
+mov t2 5
+t3 = t1 * t2
+t4 = t0 + t3
+mov r t4
+mov t5 4
+mov r t5
+mov t6 "this is a string"
+mov strval t6
+mov t7 5
+mov t t7
+mov t8 6
+mov t9 7
+t10 = t8 + t9
+mov y t10
+mov t11 2
+mov a t11
+label l0
+mov t12 a
+mov t13 5
+t14 = t12 < t13
+iffalse t14 goto l1
+mov t18 2
+mov t19 3
+t20 = t18 + t19
+iftrue t20 goto l2
+goto l3
+label l2
+mov t21 3
+mov w t21
+goto l4
+label l3
+mov t22 4
+mov w t22
+label l4
+mov t23 5
+mov h t23
+mov t24 t
+mov t25 1
+t26 = t24 + t25
+mov t t26
+mov t27 10
+t28[0]=t27
+mov t29 20
+t28[1]=t29
+mov t30 30
+t28[2]=t30
+mov arr t28
+mov t31 0
+mov k t31
+label l5
+mov t32 k
+mov t33 10
+t34 = t32 < t33
+iffalse t34 goto l6
+mov t38 o
+mov t39 1
+t40 = t38 + t39
+mov o t40
+mov t41 y
+mov t42 10
+t43 = t41 == t42
+iftrue t43 goto l7
+goto l8
+label l7
+mov t44 "new string"
+mov strval t44
+goto l9
+label l8
+mov t45 "old string"
+mov strval t45
+mov t46 10
+mov newvar t46
+label l10
+mov t47 newvar
+mov t48 0
+t49 = t47 > t48
+iffalse t49 goto l11
+mov t53 newvar
+mov t54 arr
+t55=t54[t53]
+mov t t55
+mov t50 newvar
+mov t51 1
+t52 = t50 - t51
+mov newvar t52
+goto l10
+label l11
+label l9
+mov t35 k
+mov t36 1
+t37 = t35 + t36
+mov k t37
+goto l5
+label l6
+mov t15 a
+mov t16 1
+t17 = t15 + t16
+mov a t17
+goto l0
+label l1
+mov t56 10
+mov y t56
+mov t57 10
+t58[0]=t57
+mov t59 20
+t58[1]=t59
+mov a t58
+mov t60 2
+mov t61 3
+mov t62 6
+t63 = t61 * t62
+t64 = t60 + t63
+mov t65 a
+t66=t65[t64]
+mov b t66
