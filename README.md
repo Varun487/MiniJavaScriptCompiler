@@ -30,6 +30,3 @@ make
 1. Varun Seshu - PES2201800074
 2. Sneha Jain A - PES2201800030
 3. Bhavan Naik - PES2201800047
-
-# TODO
-- Complete report
